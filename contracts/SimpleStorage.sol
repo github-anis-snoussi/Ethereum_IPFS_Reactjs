@@ -1,13 +1,14 @@
-pragma solidity 0.5.16;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.7.0;
 
 contract SimpleStorage {
-  string ipfsHash;
+  uint ipfsHash;
 
-  function set(string memory x) public {
+  function set(uint x) public {
     ipfsHash = x;
   }
 
-  function get() public view returns (string memory) {
+  function get() public view returns (uint) {
     return ipfsHash;
   }
 }
