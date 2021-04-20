@@ -12,7 +12,7 @@ class App extends Component {
       ipfsHash: '',
       web3: null,
       buffer: null,
-      account: null,
+      accounts: null,
       contract: null
     }
     this.captureFile = this.captureFile.bind(this);
@@ -71,15 +71,21 @@ class App extends Component {
   }
 
   onSubmit(event) {
+    
+    const { contract, accounts } = this.state;
+
     event.preventDefault()
-    ipfs.files.add(this.state.buffer, (error, result) => {
+    ipfs.files.add(this.state.buffer, async (error, result) => {
       if(error) {
         console.error(error)
         return
       }
-      this.state.contract.methods.set(result[0].hash).send({ from: this.state.account }).then((r) => {
-        return this.setState({ ipfsHash: result[0].hash })
-      })
+      console.log("ipfsHash : " , result[0].hash)
+
+      await contract.methods.set(result[0].hash).send({ from: accounts[0] });
+
+      this.setState({ ipfsHash: result[0].hash })
+
     })
   }
 
@@ -96,7 +102,7 @@ class App extends Component {
 
           <p>This image is stored on IPFS & The Ethereum Blockchain!</p>
           <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
-          
+
           <h2>Upload Image</h2>
           <form onSubmit={this.onSubmit} >
             <input type='file' onChange={this.captureFile} />
